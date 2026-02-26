@@ -36,4 +36,18 @@ var workspace = Blockly.inject('blocklyDiv', {
 function generarCodigo() {
   var code = Blockly.JavaScript.workspaceToCode(workspace);
   document.getElementById('codigoGenerado').innerText = code;
+
 }
+// Configuramos el generador de JavaScript para que use sintaxis de C++
+Blockly.JavaScript['controls_repeat_ext'] = function(block) {
+  // Cuántas veces se repite
+  var repeats = Blockly.JavaScript.valueToCode(block, 'TIMES', Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+  
+  // Qué bloques hay adentro del bucle
+  var branch = Blockly.JavaScript.statementToCode(block, 'DO');
+  branch = Blockly.JavaScript.addLoopTrap(branch, block);
+  
+  // Resultado en formato C++ (un simple ciclo for)
+  var code = `for (int i = 0; i < ${repeats}; i++) {\n${branch}}\n`;
+  return code;
+};
