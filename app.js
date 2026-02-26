@@ -51,3 +51,22 @@ Blockly.JavaScript['controls_repeat_ext'] = function(block) {
   var code = `for (int i = 0; i < ${repeats}; i++) {\n${branch}}\n`;
   return code;
 };
+// Definición del bloque Estructura Arduino
+Blockly.Blocks['arduino_base'] = {
+  init: function() {
+    this.appendDummyInput().appendField("Configuración (Setup)");
+    this.appendStatementInput("SETUP").setCheck(null);
+    this.appendDummyInput().appendField("Bucle Principal (Loop)");
+    this.appendStatementInput("LOOP").setCheck(null);
+    this.setColour(290);
+    this.setDeletable(false); // Que no se pueda borrar
+  }
+};
+
+// Traductor a C++
+Blockly.JavaScript['arduino_base'] = function(block) {
+  var setup = Blockly.JavaScript.statementToCode(block, 'SETUP');
+  var loop = Blockly.JavaScript.statementToCode(block, 'LOOP');
+  var code = `void setup() {\n${setup}}\n\nvoid loop() {\n${loop}}\n`;
+  return code;
+};
